@@ -10,7 +10,7 @@ PUT /students/:id - Atualizar aluno
 DELETE /students/:id - Excluir aluno
 GET /students?active=<true/false> - Lista todos os alunos ativos/inativos
 
-Estrutura:
+Estrutura dos alunos:
 
 Nome (string)
 CPF (int)
