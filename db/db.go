@@ -1,18 +1,15 @@
 package db
 
 import (
-	"fmt"
-	"log"
 
 	"github.com/glebarez/sqlite"
+	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 
-type StudentHandler struct{
+type StudentHandler struct {
 	DB *gorm.DB
 }
-
-
 
 type Student struct {
 	gorm.Model
@@ -26,7 +23,8 @@ type Student struct {
 func Init() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("student.db"), &gorm.Config{})
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal().Err(err).Msgf("Failed to initialize SQLite: %s", err.Error())
+		
 
 	}
 
@@ -36,21 +34,21 @@ func Init() *gorm.DB {
 
 }
 
-func NewStudentHandler(db *gorm.DB) *StudentHandler{
+func NewStudentHandler(db *gorm.DB) *StudentHandler {
 	return &StudentHandler{DB: db}
 
 }
-
 
 func (s *StudentHandler) AddStudent(student Student) error {
 
 	result := s.DB.Create(&student)
 	if result.Error != nil {
+		log.Error().Msg("Failed to create student!")
 		return result.Error
 
 	}
 
-	fmt.Println("Create student")
+	log.Info().Msg("Create student!")
 	return nil
 
 }

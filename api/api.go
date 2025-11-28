@@ -1,21 +1,18 @@
 package api
 
-import(
+import (
 	"fmt"
 	"net/http"
+
 	"github.com/danrodsg/api-students/db"
 
-	
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	
-	
 )
 
 type API struct {
-
 	Echo *echo.Echo
-	DB *db.StudentHandler
+	DB   *db.StudentHandler
 }
 
 func NewServer() *API {
@@ -31,18 +28,16 @@ func NewServer() *API {
 	return &API{
 		Echo: e,
 		DB:   studentsDB,
-
 	}
-}	
+}
 
 func (api *API) Start() error {
 
-	 return api.Echo.Start(":8080")
+	return api.Echo.Start(":8080")
 
 }
 
-
-func(api *API) ConfigureRoutes(){
+func (api *API) ConfigureRoutes() {
 
 	api.Echo.GET("/students", api.getStudents)
 	api.Echo.POST("/students", api.createStudent)
@@ -52,8 +47,7 @@ func(api *API) ConfigureRoutes(){
 
 }
 
-
-func (api *API)getStudents(c echo.Context) error {
+func (api *API) getStudents(c echo.Context) error {
 	students, err := api.DB.GetStudents()
 	if err != nil {
 		return c.String(http.StatusNotFound, "Failed to get student")
