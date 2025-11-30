@@ -1,7 +1,6 @@
 package db
 
 import (
-
 	"github.com/glebarez/sqlite"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
@@ -24,7 +23,6 @@ func Init() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("student.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Failed to initialize SQLite: %s", err.Error())
-		
 
 	}
 
@@ -64,6 +62,8 @@ func (s *StudentHandler) GetStudent(id int) (Student, error) {
 	err := s.DB.First(&student, id)
 	return student, err.Error
 
+}
 
-
+func (s *StudentHandler) UpdateStudent(updateStudent Student) ( error) {
+	return s.DB.Save(&updateStudent).Error
 }

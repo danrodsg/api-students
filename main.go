@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"github.com/danrodsg/api-students/api"
 	"github.com/rs/zerolog/log"
 )

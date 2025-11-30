@@ -1,14 +1,14 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
-	"errors"
 
-	"gorm.io/gorm"
 	"github.com/danrodsg/api-students/db"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 func (api *API) getStudents(c echo.Context) error {
@@ -17,8 +17,8 @@ func (api *API) getStudents(c echo.Context) error {
 		return c.String(http.StatusNotFound, "Failed to get student")
 
 	}
-	return c.JSON(http.StatusOK, students)
 
+	return c.JSON(http.StatusOK, students)
 }
 
 func (api *API) createStudent(c echo.Context) error {
@@ -34,32 +34,54 @@ func (api *API) createStudent(c echo.Context) error {
 }
 
 func (api *API) getStudent(c echo.Context) error {
-	id, err := strconv.Atoi (c.Param("id"))
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Failed to get student ID")
 
 	}
 
 	student, err := api.DB.GetStudent(id)
-	if errors.Is(err, gorm.ErrRecordNotFound){
-		return c.String(http.StatusNotFound,"Student not found")
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return c.String(http.StatusNotFound, "Student not found")
 	}
 
-	if err != nil{
-		return c.String(http.StatusInternalServerError,"Failed to get student")
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to get student")
 
 	}
 
-
-
-	
 	return c.JSON(http.StatusOK, student)
 }
 
 func (api *API) updateStudent(c echo.Context) error {
-	id := c.Param("id")
-	UpdateStud := fmt.Sprintf("Update %s student", id)
-	return c.String(http.StatusOK, UpdateStud)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to get student")
+
+	}
+
+	receivedStudent := db.Student{}
+	if err := c.Bind(&receivedStudent); err != nil {
+		return err
+	}
+
+	updatingStudent, err := api.DB.GetStudent(id)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return c.String(http.StatusNotFound, "Student not found")
+	}
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to get student")
+
+	}
+
+	student := updateStudentInfo(receivedStudent, updatingStudent)
+
+	if err := api.DB.UpdateStudent(student); err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to save student")
+	}
+
+	return c.JSON(http.StatusOK, student)
 
 }
 
@@ -68,4 +90,32 @@ func (api *API) deleteStudent(c echo.Context) error {
 	id := c.Param("id")
 	deleteStud := fmt.Sprintf("delete %s student", id)
 	return c.String(http.StatusOK, deleteStud)
+}
+
+
+func updateStudentInfo(receivedStudent, student db.Student) db.Student{
+	if receivedStudent.Name != "" {
+		student.Name = receivedStudent.Name
+	}
+
+	if receivedStudent.Email != "" {
+		student.Email = receivedStudent.Email
+	}
+
+	if receivedStudent.CPF > 0 {
+		student.CPF = receivedStudent.CPF
+	}
+
+	if receivedStudent.Age > 0 {
+		student.Age = receivedStudent.Age
+	}
+
+	if receivedStudent.Active != student.Active {
+		student.Active = receivedStudent.Active
+	}
+	return student
+
+
+
+
 }
