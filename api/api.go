@@ -1,8 +1,6 @@
 package api
 
 import (
-	
-
 	"github.com/danrodsg/api-students/db"
 
 	"github.com/labstack/echo/v4"
@@ -45,4 +43,3 @@ func (api *API) ConfigureRoutes() {
 	api.Echo.DELETE("/students/:id", api.deleteStudent)
 
 }
-

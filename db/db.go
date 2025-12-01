@@ -12,7 +12,6 @@ type StudentHandler struct {
 	DB *gorm.DB
 }
 
-
 func Init() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("student.db"), &gorm.Config{})
 	if err != nil {
@@ -58,12 +57,10 @@ func (s *StudentHandler) GetStudent(id int) (schemas.Student, error) {
 
 }
 
-func (s *StudentHandler) UpdateStudent(updateStudent schemas.Student) ( error) {
+func (s *StudentHandler) UpdateStudent(updateStudent schemas.Student) error {
 	return s.DB.Save(&updateStudent).Error
 }
 
-func (s *StudentHandler) DeleteStudent(student schemas.Student) ( error) {
+func (s *StudentHandler) DeleteStudent(student schemas.Student) error {
 	return s.DB.Delete(&student).Error
 }
-
-
