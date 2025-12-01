@@ -7,8 +7,8 @@ import (
 
 	"github.com/danrodsg/api-students/schemas"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 func (api *API) getStudents(c echo.Context) error {
@@ -18,7 +18,24 @@ func (api *API) getStudents(c echo.Context) error {
 
 	}
 
-	listOfStudents := map [string][]schemas.StudentReponse{"students": schemas.NewResponse(students)}
+	active := c.QueryParam("active")
+
+	if active != "" {
+		act, err := strconv.ParseBool("active")
+		if err != nil {
+			log.Error().Err(err).Msgf("[api] error to parse boolean")
+			return c.String(http.StatusInternalServerError, "Failed to parse boolean")
+		}
+
+		students, err = api.DB.GetFilteredStudents(act)
+		if err != nil {
+			log.Error().Err(err).Msg("[api] failed to fetch students from DB")
+			return c.String(http.StatusInternalServerError, "Internal Server Error")
+		}
+
+	}
+
+	listOfStudents := map[string][]schemas.StudentReponse{"students": schemas.NewResponse(students)}
 
 	return c.JSON(http.StatusOK, listOfStudents)
 }
@@ -35,14 +52,12 @@ func (api *API) createStudent(c echo.Context) error {
 	}
 
 	student := schemas.Student{
-		Name: studentReq.Name,
-		Email: studentReq.Email,
-		CPF: studentReq.CPF,
-		Age: studentReq.Age,
+		Name:   studentReq.Name,
+		Email:  studentReq.Email,
+		CPF:    studentReq.CPF,
+		Age:    studentReq.Age,
 		Active: *studentReq.Active,
-
 	}
-
 
 	if err := api.DB.AddStudent(student); err != nil {
 		return c.String(http.StatusInternalServerError, "Error to create student")
