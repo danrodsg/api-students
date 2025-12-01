@@ -48,7 +48,7 @@ Ativo - bool - Status de atividade do estudante (true para ativo, false para ina
  
  ## 🤖 Bash
 
-- git clone github.com/danrodsg/api-students/api
+- git clone https://github.com/danrodsg/api-students.git
 - cd api-students
 - go mod tidy
 
