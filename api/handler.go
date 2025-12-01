@@ -18,7 +18,9 @@ func (api *API) getStudents(c echo.Context) error {
 
 	}
 
-	return c.JSON(http.StatusOK, students)
+	listOfStudents := map [string][]schemas.StudentReponse{"students": schemas.NewResponse(students)}
+
+	return c.JSON(http.StatusOK, listOfStudents)
 }
 
 func (api *API) createStudent(c echo.Context) error {
@@ -46,7 +48,7 @@ func (api *API) createStudent(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "Error to create student")
 	}
 
-	return c.String(http.StatusOK, "Create student")
+	return c.JSON(http.StatusOK, student)
 }
 
 func (api *API) getStudent(c echo.Context) error {
