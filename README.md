@@ -1,81 +1,82 @@
 # 📚 API de Cadastro de Estudantes (GoLang)
 
-- Uma API RESTful completa desenvolvida em Go (Golang), utilizando uma arquitetura robusta para operações CRUD (Create, Read, Update, Delete) e persistência de dados de estudantes. Este projeto utiliza o SQLite para armazenamento de dados, garantindo facilidade de setup.
+[![Go](https://github.com/golang/go/blob/master/assets/badge.svg)](https://golang.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 🚀 Tecnologias
+Esta é uma **API RESTful** completa desenvolvida em Go (Golang) para o gerenciamento de um cadastro de estudantes. O projeto utiliza uma **arquitetura robusta** para operações CRUD (Create, Read, Update, Delete) e emprega o **SQLite** como banco de dados embutido para garantir facilidade de configuração e portabilidade.
 
--Go (Golang): Linguagem de programação principal.
+## 🚀 Tecnologias Utilizadas
 
--Arquitetura RESTful: Padrões de design para a comunicação da API.
+| Tecnologia | Descrição | Propósito no Projeto |
+| :--- | :--- | :--- |
+| **Go (Golang)** | Linguagem de programação principal. | Alta performance e concorrência nativa para o servidor HTTP. |
+| **Arquitetura RESTful** | Padrões de design para a comunicação da API. | Define *endpoints* claros e utiliza métodos HTTP padrão para operações CRUD. |
+| **SQLite** | Banco de dados embutido e baseado em arquivo. | Persistência de dados leve e sem necessidade de servidores de banco de dados externos. |
+| **Pacote SQL/ORM** | Ex: `gorm` ou `database/sql` + `mattn/go-sqlite3`. | Gerenciamento de conexões e mapeamento de objetos para o banco de dados. |
 
--SQLite: Banco de dados embutido e baseado em arquivo para persistência.
+---
 
--Pacote SQL/ORM: (Ex: gorm, database/sql + mattn/go-sqlite3).
+## 🛠️ Estrutura de Dados do Estudante
 
-## ✨ Funcionalidades (Endpoints)
+Os dados de cada estudante são persistidos no banco de dados com a seguinte estrutura:
 
-GET	 -   /students	 -  Lista todos os estudantes (ativos e inativos)
+| Campo | Tipo | Descrição |
+| :--- | :--- | :--- |
+| **Nome** | `string` | Nome completo do estudante. |
+| **CPF** | `int` | Cadastro de Pessoa Física. |
+| **E-Mail** | `string` | Endereço de e-mail. |
+| **Idade** | `int` | Idade do estudante. |
+| **Ativo** | `bool` | Status de atividade do estudante (`true` para ativo, `false` para inativo). |
 
-GET	 - /students/{id} - Obtém as informações de um estudante específico pelo seu ID.
+---
 
-GET	 - /students?active=<true/false>	- Lista os estudantes, filtrando por status de ativo (true) ou inativo (false).
+## ✨ Funcionalidades (Endpoints RESTful)
 
-POST	- /students -	Cria um novo estudante no cadastro.
+A API expõe os seguintes *endpoints* para gerenciar o cadastro de estudantes:
 
-PUT	- /students/{id}	- Atualiza as informações de um estudante existente.
+| Método HTTP | Endpoint | Descrição |
+| :--- | :--- | :--- |
+| **`GET`** | `/students` | **Lista** todos os estudantes (ativos e inativos). |
+| **`GET`** | `/students/{id}` | **Obtém** as informações de um estudante específico pelo seu ID. |
+| **`GET`** | `/students?active=<true/false>` | **Filtra** a lista de estudantes por status de ativo (`true`) ou inativo (`false`). |
+| **`POST`** | `/students` | **Cria** um novo estudante no cadastro, enviando o objeto no corpo da requisição. |
+| **`PUT`** | `/students/{id}` | **Atualiza** as informações de um estudante existente, baseado no ID. |
+| **`DELETE`** | `/students/{id}` | **Exclui** (ou marca como inativo) um estudante pelo seu ID. |
 
-DELETE - /students/{id}	- Exclui (ou marca como inativo) um estudante pelo seu ID.
+---
 
-## 💾 Estrutura do Estudante 
+## ⚙️ Como Executar o Projeto
 
-Nome - string - Nome completo do estudante.
+### 1. Pré-requisitos
 
-CPF - int - Cadastro de Pessoa Física.
+Certifique-se de ter os seguintes softwares instalados:
 
-E-Mail - string - Endereço de e-mail.
+* **Golang:** Versão **1.18 ou superior**.
+* **Git:** Para clonar o repositório.
 
-Idade - int - Idade do estudante.
+### 2. Clonar e Instalar Dependências
 
-Ativo - bool - Status de atividade do estudante (true para ativo, false para inativo).
+Abra seu terminal e siga os passos:
 
-# 🛠️ Como Executar o Projeto
+```bash
+git clone [https://github.com/danrodsg/api-students.git](https://github.com/danrodsg/api-students.git)
+cd api-estudantes
+go mod tidy
 
-## 1. Pré-requisitos
-- Golang: Versão 1.18 ou superior.
-- Git: Para clonar o repositório.
-  
- ## 2. Clonar e Instalar Dependências 
- 
- ## 🤖 Bash
+### 3. Executar a API
 
-- git clone https://github.com/danrodsg/api-students.git
-- cd api-students
-- go mod tidy
+O arquivo do banco de dados SQLite será criado automaticamente na primeira execução
 
-## 3. Executar a API 
+```bash
+go run main.go
 
-## 🤖 Bash (O arquivo do banco de dados SQLite será criado automaticamente na primeira execução)
+A API estará rodando em http://localhost:8080.
 
-- go run main.go
-- A API estará rodando em http://localhost:8080.
+### 🧪 Teste Rápido
 
-## 🧪 Testes 
+Você pode verificar se a API está no ar fazendo uma requisição GET com o curl:
 
-## 🤖 Bash : Para testar se a API está no ar:)
-
--curl -X GET http://localhost:8080/students
-
-
-
-## 🤝 Contribuições são bem-vindas! Abra uma Issue ou envie um Pull Request!
-
-# ✉️ Contato
-
-- Daniel Rodrigues / https://github.com/danrodsg
-- E-mail: danielrods2004@gmail.com
-
-  
-  
-
+``bash
+curl -X GET http://localhost:8080/students
 
 
